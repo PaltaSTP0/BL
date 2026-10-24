@@ -41,12 +41,22 @@ local ListaMobsDropdown = {
 
 -- Function to create Rayfield UI elements
 local function InitializeRayfieldUI(Library)
-    -- Main Window
+    -- Main Window con ConfigurationSaving habilitado correctamente para evitar errores nil
     local Window = Library:CreateWindow({
        Name = 'Control Panel | RPG Action',
        LoadingTitle = 'Roblox GUI',
        LoadingSubtitle = 'by CrezVr',
-       ConfigurationSaving = { Enabled = false }
+       ConfigurationSaving = {
+          Enabled = true,
+          FolderName = "RPGBasuraHub",
+          FileName = "Config"
+       },
+       Discord = {
+          Enabled = false,
+          Invite = "",
+          RememberJoins = true
+       },
+       KeySystem = false,
     })
 
     -- Tabs
