@@ -41,13 +41,15 @@ local ListaMobsDropdown = {
 
 -- Function to create Rayfield UI elements
 local function InitializeRayfieldUI(Library)
-    -- Main Window con ConfigurationSaving habilitado correctamente para evitar errores nil
+    -- Main Window con ToggleUIKeybind definido para evitar el error nil de la línea 1982
     local Window = Library:CreateWindow({
        Name = 'Control Panel | RPG Action',
        LoadingTitle = 'Roblox GUI',
        LoadingSubtitle = 'by CrezVr',
+       Keybind = Enum.KeyCode.RightControl,
+       ToggleUIKeybind = Enum.KeyCode.RightControl,
        ConfigurationSaving = {
-          Enabled = true,
+          Enabled = false,
           FolderName = "RPGBasuraHub",
           FileName = "Config"
        },
@@ -354,7 +356,7 @@ local function InitializeRayfieldUI(Library)
     })
 end
 
--- Load Rayfield UI cleanly from GitHub source
+-- Load Rayfield UI safely from GitHub source
 local success, Rayfield = pcall(function()
     return loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 end)
