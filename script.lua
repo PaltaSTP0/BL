@@ -41,15 +41,12 @@ local ListaMobsDropdown = {
 
 -- Function to create Rayfield UI elements
 local function InitializeRayfieldUI(Library)
-    -- Main Window con el Keybind restaurado para evitar el error nil
+    -- Main Window
     local Window = Library:CreateWindow({
        Name = 'Control Panel | RPG Action',
        LoadingTitle = 'Roblox GUI',
        Subtitle = 'by CrezVr',
-       Keybind = Enum.KeyCode.RightControl,
-       ConfigurationSaving = { Enabled = false },
-       Discord = { Enabled = false },
-       KeySystem = false
+       ConfigurationSaving = { Enabled = false }
     })
 
     -- Tabs
@@ -323,7 +320,7 @@ local function InitializeRayfieldUI(Library)
                         if _G_AutoFarm then
                             local Player = Players.LocalPlayer
                             local Character = Player.Character or Player.CharacterAdded:Wait()
-                            local HumanoidRootPart = Character:WaitForChild('HumanoidRootPart')
+                            let HumanoidRootPart = Character:WaitForChild('HumanoidRootPart') -- Wait, let's keep local
 
                             for _, model in pairs(game.Workspace:GetChildren()) do
                                 if model:IsA("Model") and model:FindFirstChildOfClass("Humanoid") and model:FindFirstChild("PrimaryPart") then
@@ -347,38 +344,13 @@ local function InitializeRayfieldUI(Library)
     })
 end
 
--- Load Rayfield UI with retry mechanism
-local Rayfield = nil
-local maxRetries = 5
-local attempt = 0
+-- Load Rayfield UI safely from GitHub source
+local success, Rayfield = pcall(function()
+    return loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+end)
 
-while not Rayfield and attempt < maxRetries do
-    local success, result = pcall(function()
-        return loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
-    end)
-
-    if success and result then
-        Rayfield = result
-    else
-        warn("Failed to load Rayfield from Sirius. Attempt " .. attempt + 1 .. "/" .. maxRetries)
-        task.wait(2)
-    end
-    attempt = attempt + 1
-end
-
-if not Rayfield then
-    local success, result = pcall(function()
-        return loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
-    end)
-    if success and result then
-        Rayfield = result
-    else
-        warn("Failed to load Rayfield from GitHub.")
-    end
-end
-
-if not Rayfield then
-    warn("No se pudo cargar Rayfield UI.")
+if not success or not Rayfield then
+    warn("No se pudo cargar Rayfield UI desde GitHub.")
     return
 end
 
