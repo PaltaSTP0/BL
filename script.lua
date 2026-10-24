@@ -45,7 +45,7 @@ local function InitializeRayfieldUI(Library)
     local Window = Library:CreateWindow({
        Name = 'Control Panel | RPG Action',
        LoadingTitle = 'Roblox GUI',
-       Subtitle = 'by CrezVr',
+       LoadingSubtitle = 'by CrezVr',
        ConfigurationSaving = { Enabled = false }
     })
 
@@ -320,7 +320,7 @@ local function InitializeRayfieldUI(Library)
                         if _G_AutoFarm then
                             local Player = Players.LocalPlayer
                             local Character = Player.Character or Player.CharacterAdded:Wait()
-                            let HumanoidRootPart = Character:WaitForChild('HumanoidRootPart') -- Wait, let's keep local
+                            local HumanoidRootPart = Character:WaitForChild('HumanoidRootPart')
 
                             for _, model in pairs(game.Workspace:GetChildren()) do
                                 if model:IsA("Model") and model:FindFirstChildOfClass("Humanoid") and model:FindFirstChild("PrimaryPart") then
@@ -344,7 +344,7 @@ local function InitializeRayfieldUI(Library)
     })
 end
 
--- Load Rayfield UI safely from GitHub source
+-- Load Rayfield UI cleanly from GitHub source
 local success, Rayfield = pcall(function()
     return loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 end)
