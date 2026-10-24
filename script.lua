@@ -41,12 +41,15 @@ local ListaMobsDropdown = {
 
 -- Function to create Rayfield UI elements
 local function InitializeRayfieldUI(Library)
-    -- Main Window (Corregido a Library:CreateWindow con dos puntos)
+    -- Main Window con el Keybind restaurado para evitar el error nil
     local Window = Library:CreateWindow({
        Name = 'Control Panel | RPG Action',
        LoadingTitle = 'Roblox GUI',
        Subtitle = 'by CrezVr',
-       ConfigurationSaving = { Enabled = false }
+       Keybind = Enum.KeyCode.RightControl,
+       ConfigurationSaving = { Enabled = false },
+       Discord = { Enabled = false },
+       KeySystem = false
     })
 
     -- Tabs
