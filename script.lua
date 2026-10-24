@@ -41,15 +41,14 @@ local ListaMobsDropdown = {
 
 -- Function to create Rayfield UI elements
 local function InitializeRayfieldUI(Library)
-    -- Main Window con ToggleUIKeybind definido para evitar el error nil de la línea 1982
+    -- Main Window con los parámetros de configuración completos para prevenir errores internos
     local Window = Library:CreateWindow({
        Name = 'Control Panel | RPG Action',
        LoadingTitle = 'Roblox GUI',
        LoadingSubtitle = 'by CrezVr',
        Keybind = Enum.KeyCode.RightControl,
-       ToggleUIKeybind = Enum.KeyCode.RightControl,
        ConfigurationSaving = {
-          Enabled = false,
+          Enabled = true,
           FolderName = "RPGBasuraHub",
           FileName = "Config"
        },
@@ -356,13 +355,13 @@ local function InitializeRayfieldUI(Library)
     })
 end
 
--- Load Rayfield UI safely from GitHub source
+-- Load Rayfield UI safely from official Sirius source
 local success, Rayfield = pcall(function()
-    return loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+    return loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 end)
 
 if not success or not Rayfield then
-    warn("No se pudo cargar Rayfield UI desde GitHub.")
+    warn("No se pudo cargar Rayfield UI.")
     return
 end
 
