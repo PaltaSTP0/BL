@@ -1,347 +1,248 @@
 local AutoFarmUI = Instance.new("ScreenGui")
 AutoFarmUI.Name = "AutoFarmUI"
-AutoFarm-UI.Parent = game.Players.LocalPlayer.StarterGui
+AutoFarmUI.Parent = game.Players.LocalPlayer.StarterGui
 
 -- Crear Frame Principal
 local MainFrame = Instance.new("Frame")
-MainFrame.Size = Vector2.new(300, 450)
-MainFrame.Position = UDim2.new(0.87, -10), UDim2.new(0.5, -100)
+MainFrame.Size = Vector2.new(300, 650)
+MainFrame.Position = UDim2.new(0.87, -10), UDim2.new(0.5, -200)
 MainFrame.Parent = AutoFarmUI
 
--- Toggle Auto-Farm
+-- Función para obtener el tamaño de la pantalla
+local function GetScreenSize()
+    local UISize = Vector2.new(
+        game:GetService("GuiService"):GetPhysicalScreenResolution().X,
+        game:GetService("GuiService"):GetPhysicalScreenResolution().Y
+    )
+    return UDim2.new(0, 300), UDim2.new(0.5, -150)
+end
+
+-- Función para actualizar las coordenadas de los elementos UI cuando cambia la pantalla
+local function UpdateUIPositions()
+    MainFrame.Size = Vector2.new(300, 650)
+    MainFrame.Position = GetScreenSize()
+end
+
+game:GetService("GuiService").PhysicalScreenResolutionChanged:Connect(function()
+    UpdateUIPositions()
+end)
+
+-- Crear los elementos de la interfaz gráfica
 local ToggleAutoFarmLabel = Instance.new("TextLabel")
-ToggleAutoFarmLabel.Size = Vector2.new(280, 30)
-ToggleAutoFarmLabel.Position = UDim2.new(0, 10), UDim2.new(0, 5)
+ToggleAutoFarmLabel.Size = Vector2.new(300, 40)
+ToggleAutoFarmLabel.Position = UDim2.new(0, 15), UDim2.new(0, 10)
 ToggleAutoFarmLabel.Text = "AUTO-FARM"
+ToggleAutoFarmLabel.Font = Enum.Font.SourceSans
+ToggleAutoFarmLabel.TextColor3 = Color3.new(1, 1, 1)
 ToggleAutoFarmLabel.Parent = MainFrame
 
 local ToggleAutoFarmButton = Instance.new("TextButton")
-ToggleAutoFarmButton.Size = Vector2.new(280, 30)
-ToggleAutoFarmButton.Position = UDim2.new(0, 10), UDim2- new(0, -5)
-ToggleAutoFarmButton.Parent = MainFrame
+ToggleAutoFarmButton.Size = Vector2.new(300, 40)
+ToggleAutoFarmButton.Position = UDim2.new(0, 15), UDim2.new(0, 60)
 ToggleAutoFarmButton.Text = "ACTIVAR"
-ToggleAutoFarmButton.MouseClick:Connect(function()
-    ToggleAutoFarmButton.Text = ToggleAutoFarmButton.Text == "ACTIVAR" and "DESACTIVAR" or "ACTIVAR"
-end)
+ToggleAutoFarmButton.Font = Enum.Font.SourceSans
+ToggleAutoFarmLabel.Parent = MainFrame
 
 -- Configuración de Mob Cooldown
-local MobCooldownLabel = Instance.new("TextLabel")
-MobCooldownLabel.Size = Vector2.new(300, 40)
-MobCooldownLabel.Position = UDim2.new(0, 10), UDim2.new(0, 120)
-MobCooldownLabel.Text = "Cooldown de Ataque por Mob:"
-MobCooldownLabel.Parent = MainFrame
+local CooldownLabel = Instance.new("TextLabel")
+CooldownLabel.Size = Vector2.new(300, 40)
+CooldownLabel.Position = UDim2.new(0, 15), UDim2.new(0, 160)
+CooldownLabel.Text = "Cooldown de Ataque por Mob:"
+CooldownLabel.Font = Enum.Font.SourceSans
+CooldownLabel.TextColor3 = Color3.new(1, 1, 1)
+CooldownLabel.Parent = MainFrame
 
-local CooldownSlider = Instance.new("SpinBox")
-CooldownSlider.Size = Vector2.new(300, 30)
-CooldownSlider.Position = UDim2.new(0, 10), UDim2.new(0, 160)
-CooldownSlider.MinValue = 0.1
-CooldownSlider.MaxValue = 5
-CooldownSlider.Decimals = 1
-CooldownSlider.Value = 1.5 -- Valor predeterminado
-CooldownSlider.Parent = MainFrame
+local CooldownValueLabel = Instance.new("TextLabel")
+CooldownValueLabel.Size = Vector2.new(60, 40)
+CooldownValueLabel.Position = UDim2.new(0.5, -30), UDim2.new(0, 160)
+CooldownValueLabel.Text = "1.5"
+CooldownValueLabel.Font = Enum.Font.SourceSans
+CooldownValueLabel.TextColor3 = Color3.new(1, 1, 1)
+CooldownValueLabel.Parent = MainFrame
 
--- Selector de Mobs Multi
-local MobSelectorLabel = Instance.new("TextLabel")
-Mob-SelectorLabel.Size = Vector2.new(300, 40)
-MobSelectorLabel.Position = UDim2.new(0, 10), UDim2.new(0, 250)
-MobSelectorLabel.Text = "Seleccionar Mobs:"
-MobSelectorLabel.Parent = MainFrame
-
-local MobListContainer = Instance.new("Frame")
-MobListContainer.Size = Vector2.new(300, 160)
-MobListContainer.Position = UDim2.new(0, 10), UDim2.new(0, 290)
-MobListContainer.Parent = MainFrame
-MobListContainer.Active = true
-
-local MobNames = {
-    "bandit",
-    "bad bandit",
-    "giant bandit", 
-    "boss bandit", 
-    "sniper bandit"
-}
-
-for _, mob in ipairs(MobNames) do
-    local CheckLabel = Instance.new("TextLabel")
-    CheckLabel.Size = Vector2.new(150, 30)
-    CheckLabel.Position = UDim2.new(0, 5), UDim2.new(0, 5 + (mob index - 1)*35))
-    CheckLabel.Text = mob
-    CheckLabel.Parent = MobListContainer
-
-    local Checkbox = Instance.new("TextButton")
-    Checkbox.Size = Vector2.new(140, 25)
-    Checkbox.Position = UDim2.new(0, 5 + (mob index - 1)*35), UDim2.new(0.87, 0))
-    Checkbox.Text = ""
-    Checkbox.Parent = MobListContainer
-end)
+local CooldownSlider = Instance.new("TextButton")
+CooldownSlider.Size = Vector2.new(240, 40)
+CooldownSlider.Position = UDim2.new(0.5, -60), UDim2.new(0, 160)
+CooldownSlider.Text = "SpinBox"
+-- Crear un control deslizante personalizado
+local CooldownFrame = Instance.new("Frame")
+CooldownFrame.Size = Vector2.new(300, 70)
+CooldownFrame.Position = UDim2.new(0, 15), UDim2.new(0, 200)
+CooldownFrame.Parent = MainFrame
 
 -- Configuración de Distancia y Velocidad
+local SettingsLabel = Instance.new("TextLabel")
+SettingsLabel.Size = Vector2.new(300, 40)
+SettingsLabel.Position = UDim2.new(0, 15), UDim2.new(0, 260)
+SettingsLabel.Text = "Distancia de Ataque y Velocidad:"
+SettingsLabel.Font = Enum.Font.SourceSans
+SettingsLabel.TextColor3 = Color3.new(1, 1, 1)
+SettingsLabel.Parent = MainFrame
+
 local DistanceLabel = Instance.new("TextLabel")
-DistanceLabel.Size = Vector2.new(300, 40)
-DistanceLabel.Position = UDim2.new(0, 10), UDim2.new(0, 390))
-DistanceLabel.Text = "Distancia de Ataque:"
+DistanceLabel.Size = Vector2.new(150, 40)
+DistanceLabel.Position = UDim2.new(0.37, -68), UDim2.new(0, 290))
+DistanceLabel.Text = "Distancia:"
+DistanceLabel.Font = Enum.Font.SourceSans
+DistanceLabel.TextColor3 = Color3.new(1, 1, 1)
 DistanceLabel.Parent = MainFrame
 
-local DistanceSlider = Instance.new("SpinBox")
-DistanceSlider.Size = Vector2.new(300, 30)
-DistanceSlider.Position = UDim2.new(0, 10), UDim2.new(0, 430))
-DistanceSlider.MinValue = 5
-DistanceSlider.MaxValue = 20
-DistanceSlider.Decimals = 0
-DistanceSlider.Value = 8 -- Valor predeterminado
-DistanceSlider.Parent = MainFrame
+local DistanceValueLabel = Instance.new("TextLabel")
+DistanceValueLabel.Size = Vector2.new(60, 40)
+DistanceValueLabel.Position = UDim2.new(0.5, -87), UDim2.new(0, 290))
+DistanceValueLabel.Text = "10"
+DistanceValueLabel.Font = Enum.Font.SourceSans
+DistanceValueLabel.TextColor3 = Color3.new(1, 1, 1)
+DistanceValueLabel.Parent = MainFrame
 
 local SpeedLabel = Instance.new("TextLabel")
-SpeedLabel.Size = Vector2.new(300, 40)
-SpeedLabel.Position = UDim2.new(0, 10), UDim2.new(0, 570))
-SpeedLabel.Text = "Velocidad de Desplazamiento:"
+SpeedLabel.Size = Vector2.new(75, 40)
+SpeedLabel.Position = UDim2.new(0.68, -90), UDim2.new(0, 320))
+SpeedLabel.Text = "Velocidad:"
+SpeedLabel.Font = Enum.Font.SourceSans
+SpeedLabel.TextColor3 = Color3.new(1, 1, 1)
 SpeedLabel.Parent = MainFrame
 
-local SpeedSlider = Instance.new("SpinBox")
-SpeedSlider.Size = Vector2.new(300, 30)
-Speed- Slider.Position = UDim2.new(0, 10), UDim2.new(0, 610))
-SpeedSlider.MinValue = 5
-SpeedSlider.MaxValue = 50
-SpeedSlider.Decimals = 0
-SpeedSlider.Value = 20 -- Valor predeterminado
+local SpeedValueLabel = Instance.new("TextLabel")
+SpeedValueLabel.Size = Vector2.new(60, 40)
+SpeedValueLabel.Position = UDim2.new(0.75, -90), UDim2.new(0, 320))
+SpeedValueLabel.Text = "1"
+SpeedValueLabel.Font = Enum.Font.SourceSans
+SpeedValueLabel.TextColor3 = Color3.new(1, 1, 1)
+SpeedValueLabel.Parent = MainFrame
+
+-- Crear deslizador de distancia usando un frame con scrollbars
+local DistanceSlider = Instance.new("Frame")
+DistanceSlider.Size = Vector2.new(300, 45)
+DistanceSlider.Position = UDim2.new(0.37, -68), UDim2.new(0, 330))
+DistanceSlider.Parent = MainFrame
+
+local DistanceThumb = Instance.new("TextButton")
+DistanceThumb.Size = Vector2.new(30, 40)
+DistanceThumb.Position = UDim2.new(0, 15), UDim2.new(0, 368))
+DistanceThumb.Text = ""
+DistanceThumb.BackgroundColorColor = Color3.new(1, 0, 0)
+DistanceThumb.Parent = DistanceSlider
+
+local SpeedSliderContainer = Instance.new("UICornerContainer")
+SpeedSliderContainer.Size = Vector2.new(5, -40) -- Solo decoración
+local SpeedSlider = Instance.new("Frame")
+SpeedSlider.Size = Vector2.new(300, 45)
+SpeedSlider.Position = UDim2.new(0.75, -90), UDim2.new(0, 280))
 SpeedSlider.Parent = MainFrame
 
--- Utilidades de Teclas Rápidas (Toggles)
+-- Crear scrollbar para velocidad
+local SpeedThumb = Instance.new("TextButton")
+SpeedThumb.Size = Vector2.new(30, 40)
+SpeedThumb.Position = UDim2.new(0, 75), UDim2.new(0, 288))
+SpeedThumb.Text = ""
+SpeedThumb.BackgroundColorColor = Color3.new(0, 1, 0)
+
+-- Crear barra de fondo para los sliders
+local function CreateSliderBackground(slider)
+    local Background = Instance.new("Frame")
+    Background.Size = Vector2.new(300, 5)
+    Background.Position = UDim2.new(0.75, -168), UDim2.new(0, slider.Position.Y.Offset))
+    Background.Parent = MainFrame
+    Background.BorderSizePreset = 0
+    
+    local Rail = Instance.new("TextButton")
+    Rail.Size = Vector2.new(-300, 5)
+    Rail.Text = ""
+    Rail.BackgroundColorColor = Color3.fromRGB(180, 180, 180)
+    
+    local Knob = Instance.new("TextButton")
+    Knob.Size = Vector2.new(-slider.Size.X.Offset - 40, slider.Size.Y.Offset + 5))
+    Knob.Text = ""
+    Knob.BackgroundColorColor = Color3.fromRGB(100, 100, 100)
+    
+    -- No puedo implementar esto completamente en Luau sin usar eventos más avanzados
+end
+
+-- Utilidades y Teclas Rápidas (Toggles)
 local UtilitiesLabel = Instance.new("TextLabel")
 UtilitiesLabel.Size = Vector2.new(300, 40)
-Util-UtilitiesLabel.Position = UDim2.new(0, 10), UDim2.new(0, 750))
+UtilitiesLabel.Position = UDim2.new(0.75, -90), UDim2.new(0, 380))
 UtilitiesLabel.Text = "Utilidades:"
+UtilitiesLabel.Font = Enum.Font.SourceSans
+UtilitiesLabel.TextColor3 = Color3.new(1, 1, 1)
 UtilitiesLabel.Parent = MainFrame
 
+-- Botón de Auto Recargar Energía (C)
 local AutoRecargarToggle = Instance.new("TextButton")
-AutoRecargarToggle.Size = Vector2.new(300, 30)
-AutoRecargarToggle.Position = UDim2.new(0, 10), UDim2.new(0, 790))
+AutoRecargarToggle.Size = Vector2.new(200, 40)
+AutoRecargarToggle.Position = UDim2.new(0.375, -81), UDim2.new(0, 495))
 AutoRecargarToggle.Text = "Auto Recargar (C)"
+AutoRecargarToggle.Font = Enum.Font.SourceSans
 AutoRecargarToggle.Parent = MainFrame
 
+-- Botón de Auto Kaioken (M)
 local AutoKaiokenToggle = Instance.new("TextButton")
-AutoKaiokenToggle.Size = Vector2.new(300, 30)
-AutoKaiokenToggle.Position = UDim2.new(0, 10), UDim2.new(0, 840))
+AutoKaiokenToggle.Size = Vector2.new(200, 40)
+AutoKaiokenToggle.Position = UDim2.new(0.375, -81), UDim2.new(0, 530))
 AutoKaiokenToggle.Text = "Auto Kaioken (M)"
+AutoKaiokenToggle.Font = Enum.Font.SourceSans
 AutoKaiokenToggle.Parent = MainFrame
 
+-- Botón de Auto Transformarse (G)
 local AutoTransformarToggle = Instance.new("TextButton")
-AutoTransformarToggle.Size = Vector2.new(300, 30)
-AutoTransformarToggle.Position = UDim2.new(0, 10), UDim2.new(0, 890))
+AutoTransformarToggle.Size = Vector2.new(200, 40)
+AutoTransformarToggle.Position = UDim2.new(0.375, -81), UDim2.new(0, 565))
 AutoTransformarToggle.Text = "Auto Transformarse (G)"
+AutoKaiokenToggle.Font = Enum.Font.SourceSans
 AutoTransformarToggle.Parent = MainFrame
 
+-- Auto Equipamiento Constante (1)
 local AutoEquiparToggle = Instance.new("TextButton")
-AutoEquiparToggle.Size = Vector2.new(300, 30)
-AutoEquiparToggle.Position = UDim2.new(0, 10), UDim2.new(0, 940))
+AutoEquiparToggle.Size = Vector2.new(200, 40)
+AutoEquiparToggle.Position = UDim2.new(0.375, -81), UDim2.new(0, 600))
 AutoEquiparToggle.Text = "Auto Equipamiento (1)"
+AutoEquiparToggle.Font = Enum.Font.SourceSans
 AutoEquiparToggle.Parent = MainFrame
 
 -- Variables Globales
-local CooldownAtaqueValue = nil
-local DistanciaAtaqueValue = nil
-local VelocidadDesplazamientoValue = nil
-local MobsSeleccionados = {}
-local AutoFarmActivo = false
-local AutoRecargarActivo = false
-local AutoKaiokenActivo = false
-local AutoTransformarActivo = false
-local AutoEquiparActivo = false
+local AutoFarmConfig = {
+    CooldownAtaqueValue = 1.5,
+    DistanciaAtaqueValue = 10,
+    VelocidadDesplazamientoValue = 20,
+    
+    AutoRecargarActivo = false,
+    AutoKaiokenActivo = false,
+    AutoTransformarActivo = false,
+    AutoEquiparActivo = true
+}
 
--- Actualizar valores iniciales
-CooldownAtaqueValue = CooldownSlider.Value
-DistanciaAtaqueValue = DistanceSlider.Value
-VelocidadDesplazamientoValue = SpeedSlider.Value
-
--- Funciones de Control UI
-ToggleAutoFarmButton.MouseClick:Connect(function()
-    AutoFarmActivo = not AutoFarmActivo
-    ToggleAutoFarmButton.Text = AutoFarmActivo and "DESACTIVAR" or "ACTIVAR"
-end)
-
-CooldownSlider.Changed:Connect(function()
-    CooldownAtaqueValue = CooldownSlider.Value
-end)
-
-DistanceSlider.Changed:Connect(function()
-    DistanciaAtaqueValue = DistanceSlider.Value
-end)
-
-SpeedSlider.Changed:Connect(function()
-    VelocidadDesplazamientoValue = SpeedSlider.Value
-end)
-
-AutoRecargarToggle.MouseClick:Connect(function()
-    AutoRecargarActivo = not AutoRecargarActivo
-    AutoRecargarToggle.Text = AutoRecargarActivo and "DESHABILITAR" or "HABILITAR"
-end)
+local MobsSeleccionados = {
+    { name = "Bandit", enabled = false },
+    { name = "Bad Bandit", enabled = false },
+    { name = "Giant Bandit", enabled = false },
+    { name = "Boss Bandit", enabled = false }
+}
 
 -- Función para obtener Mobs por Nombre
 local function GetMobsByNames(names)
     local result = {}
     for _, name in ipairs(names) do
-        local objetos = game.Workspace:FindObjectsByName(name)
-        if #objetos > 0 then
+        -- En Roblox, no existe FindObjectsByName nativo en la API estándar
+        -- Necesitaríamos hacer una búsqueda manual:
+        local objetosEncontrados = game.Workspace:FindFirstChild(name) or nil
+        
+        if objetoEncontrado then
             table.insert(result, {
                 ["name"] = name,
-                ["objs"] = objetos
+                ["objetos"] = {objetoEncontrado},
+                ["cooldown"] = AutoFarmConfig.CooldownAtaqueValue
             })
-        end
-    end
-    return result
-end
-
--- Función para teletransportar al jugador a un mob específico
-local function TeletransportarAObjetivo(obj)
-    local player = game.Players.LocalPlayer
-    local humanoidRootPart
-    
-    if obj:IsA("Model") then
-        humanoidRootPart = obj:FindFirstChild("HumanoidRootPart")
-    elseif obj:IsA("BasePart") or obj:IsA("Attachment") then
-        humanoidRootPart = obj
-    end
-    
-    if not humanoidRootPart then return false end
-    
-    local playerHumanoid = player.Character:FindFirstChild("Humanoid")
-    
-    -- Usar BodyGoto para movimiento fluido con bypasses
-    local tweenConfig = {
-        Time = 0.5,
-        EasingStyle = Enum.EasingStyle.Linear,
-        TweenFunction = tweenService:GetTweenType(Enum TweenType.Linear)
-    }
-    
-    player.Character.HumanoidRootPart:TeleportToPosition(humanoidRootPart.Position, false, true)
-    
-    return true
-end
-
--- Sistema de Kill Aura con Bypass
-local function AplicarKillAura()
-    -- Obtener todos los mobs seleccionados en un array plano
-    local targets = {}
-    for _, group in ipairs(MobsSeleccionados) do
-        for i=1, #group.objs do
-            table.insert(targets, MobsSeleccionados[i].objs[i])
         end
     )
     
-    -- Bucle para disparar a múltiples objetivos
-    if AutoKaiokenActivo then
-        targets = targets or {}
-        
-        repeat
-            local actualizado = false
-            
-            for _, target in ipairs(targets) do
-                TeletransportarAObjetivo(target)
-                
-                wait(0.1 * (VelocidadDesplazamientoValue / 50))
-            end
-            
-            if AutoRecargarActivo then 
-                -- Aquí añadir lógica de recarga
-            else
-                actualizado = true
-            end
-            
-            wait(0.2)
-        until not AutoFarmActivo or not AutoKaiokenActivo
-        
-    elseif #MobsSeleccionados > 0 and MobsSeleccionados[1] ~= nil then
-        -- Lógica para un solo objetivo (modificar según necesidad)
-    else
-        warn("No hay mobs seleccionados")
-    end
-    
-    return true
+    return result
 end
 
--- Función para simular click del botón izquierdo con precisión garantizada
-local function SimularClickIzquierdo()
-    -- Bypass completo: Usar UserInputService y liberar recursos inmediatamente
-    local userInputService = game:GetService("UserInputService")
+-- Función para teletransportar al jugador a un mob específico con bypass anti-cheat
+local function Teletransportar(player, objetivo)
+    local tweenService = game:GetService("TweenService")
+    local character = player.Character
     
-    if AutoFarmActivo then 
-        userInputService.MouseIconEnabled = false
-        
-        repeat
-            wait(0.1 * CooldownAtaqueValue)
-            
-            -- Ejecutar con UserInputService para mejor integración
-            for i=1, 2 do -- Simular hasta 2 golpes por mob (ajustar según necesidad)
-                userInputService:CaptureMouse()
-                game:GetService("TweenService"):Create(userInputService.MouseCatcher, TweenInfo.new(0.5), {Position = UVector2.new(math.random() * screenSize.X, math.random() * screenSize.Y)}):Play()
-                
-                wait(0.1)
-            end
-            
-        until not AutoFarmActivo
-    else
-        userInputService.MouseIconEnabled = true
-    end
-    
-    return true
-end
-
--- Función para mantener tecla 1 presionada (Auto Equipamiento Constante)
-local function MantenerTeclaEquipamiento()
-    if AutoEquiparToggle.Text == "HABILITAR" then 
-        -- Activar y desactivar con micro pausas para bypasses
-        while true do
-            game:GetService("UserInputService"):SetCoreObjectProximityPriority(Enum.CoreObjectProximityPriority.Far)
-            
-            repeat
-                wait(0.01 * (VelocidadDesplazamientoValue / 50))
-                
-                if AutoFarmActivo and not AutoEquiparToggle entonces break end
-                
-            until true
-            
-        end
-    else
-        -- Desactivar y liberar recursos
-    end
-    
-    return true
-end
-
--- Función principal del Auto-Farm
-while game:IsRunning() do 
-    local script = script.Parent
-    
-    if ToggleAutoFarmButton.Text == "ACTIVAR" then 
-        AutoFarmActivo = false
-        
-    else
-        AutoFarmActivo = true
-        
-        -- Ejecutar todas las configuraciones simultáneamente con control de concurrencia
-        coroutin- es {
-            CooldownAtaqueValue,
-            DistanciaAtaqueValue,
-            VelocidadDesplazamientoValue,
-            MobsSeleccionados
-        }
-        
-        spawn(SimularClickIzquierdo)
-        spawn(AplicarKillAura)
-        spawn(MantenerTeclaEquipamiento)
-    end
-    
-    -- Limpiar referencias cuando se detenga el Auto-Farm
-    if not AutoFarmActivo then 
-        userInputService.MouseIconEnabled = true
-        
-        for _, toggle in ipairs({AutoRecargarToggle, AutoKaiokenToggle, AutoTransformarToggle}) do 
-            toggle.Text = "HABILITAR"
-        end
-        
-        -- Reiniciar valores a predeterminados
-    else
-        -- Continuar con la automatización
-    end
-    
-end)
+    if not character then
+        wait(0.2)
