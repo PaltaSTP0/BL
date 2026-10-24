@@ -41,12 +41,11 @@ local ListaMobsDropdown = {
 
 -- Function to create Rayfield UI elements
 local function InitializeRayfieldUI(Library)
-    -- Main Window
-    local Window = Library.CreateWindow({
+    -- Main Window (Corregido a Library:CreateWindow con dos puntos)
+    local Window = Library:CreateWindow({
        Name = 'Control Panel | RPG Action',
        LoadingTitle = 'Roblox GUI',
        Subtitle = 'by CrezVr',
-       DisableRayfieldPrompts = true,
        ConfigurationSaving = { Enabled = false }
     })
 
